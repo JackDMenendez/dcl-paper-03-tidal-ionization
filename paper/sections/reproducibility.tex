@@ -1,17 +1,60 @@
 % reproducibility.tex
 \label{sec:reproducibility}
 
-\placeholder{Compact reproducibility quickstart. Goal: a reader who has
-just cloned the repository at the release tag can reproduce the
-paper's headline claim in under five minutes.
-
-Suggested structure:
 \begin{itemize}
-\item \textbf{Environment.} Operating system, language version, key
-      dependencies (point to the manifest file rather than re-listing).
-\item \textbf{Build the paper.} The commands needed from a fresh clone.
-\item \textbf{Verify the headline result.} A minimal snippet --- ideally
-      under ten lines --- that re-derives the central numerical claim.
-\item \textbf{Where to look next.} Pointers to the experiment scripts
-      and data files for deeper checks.
-\end{itemize}}
+\item \textbf{Environment.}  Python~3 with \texttt{numpy},
+      \texttt{scipy}, \texttt{matplotlib}, \texttt{pytest}.
+      Exact dependency list in
+      \texttt{virtual-env-requirements.txt}.  The \texttt{setup.sh}
+      / \texttt{setup.cmd} scripts create a \texttt{.venv} and
+      install everything.
+
+\item \textbf{Engine.}  The experiment depends on the A=1 framework
+      engine via the shared \texttt{dcl\_core} package
+      (\texttt{dcl\_core.core.OctahedralLattice},
+      \texttt{dcl\_core.core.CausalSession}, \dots).
+      \texttt{dcl\_core} is declared in
+      \texttt{virtual-env-requirements.txt} and installed by
+      \texttt{setup.cmd} / \texttt{setup.sh} automatically; no
+      separate engine setup step is required.  See \texttt{CLAUDE.md}'s
+      \emph{Engine} section for the architectural rationale and the
+      pinning strategy at release time.
+
+\item \textbf{Build the paper.}  From a fresh clone, with the venv
+      activated:
+      \begin{verbatim}
+./build.sh paper        # POSIX / MSYS2 UCRT64 on Windows
+build.cmd paper         # Windows cmd / PowerShell
+      \end{verbatim}
+      runs \texttt{pdflatex} three times and \texttt{bibtex} once,
+      producing \texttt{paper/main.pdf}.
+
+\item \textbf{Run the experiment.}  Once the engine is provisioned:
+      \begin{verbatim}
+python -u src/experiments/exp_18_tidal_ionization.py \
+    > data/exp_18_tidal_ionization.log 2>&1
+      \end{verbatim}
+      Wall-clock runtime: a few hours on a modern laptop (7
+      gradient values $\times$ up to 2500 ticks each, with each
+      tick a 3D wavefunction step on a $65^3$ grid).  Expected
+      output: monotonic $T_\text{escape}(g)$ decrease and an
+      opposite-sign tidal-displacement signature
+      ($x_e\_proj \cdot x_p\_proj < 0$) for $g > 0$.
+
+\item \textbf{Master audit roll-up.}  From the repo root:
+      \begin{verbatim}
+python audit_universe.py
+      \end{verbatim}
+      reports the declared status of every row in
+      \texttt{paper/sections/audit\_table.tex} and parses the
+      latest \texttt{data/exp\_18*.log} for the actual cached
+      \texttt{PASS}/\texttt{FAIL} marker.
+
+\item \textbf{Where to look next.}  Start with
+      \texttt{notes/quantum\_roche\_limit.md} for the analytical
+      derivation; then
+      \texttt{notes/plasma\_as\_gravitational\_ionization.md}
+      (inherited from Paper~I) for the broader gradient-ionization
+      theory; then the experiment's \texttt{.md} companion for
+      runtime parameters and audit criteria.
+\end{itemize}

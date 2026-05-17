@@ -16,55 +16,63 @@
 %% ---------------------------------------------------------------
 %% TITLE PAGE
 %% ---------------------------------------------------------------
-%% TODO: replace title, subtitle, author, ORCID, email.
-%% TODO: at release time, fill in the \thanks{} block with version,
-%%       Zenodo DOI, GitHub URL, and any series identifier.
 
-\title{Your Paper Title:\\
-       Optional Subtitle on a Second Line%
-       \thanks{Version 0.1-DRAFT.
-       %% Fill in at release time:
-       %% \href{https://doi.org/10.5281/zenodo.XXXXXXXX}%
-       %%      {DOI: 10.5281/zenodo.XXXXXXXX}.
-       %% \href{https://github.com/USER/REPO}%
-       %%      {GitHub: USER/REPO}.
-       Pre-release draft; DOI to be assigned.}}
-\author{Author Name\\
-        \small City, State\\
-        \small ORCID: \href{https://orcid.org/0000-0000-0000-0000}{0000-0000-0000-0000}\\
-        \small \href{mailto:author@example.com}{author@example.com}}
+\title{Tidal Ionization of Atomic Hydrogen and\\
+       the Quantum Roche Limit%
+       \thanks{Version 0.1-DRAFT.  Paper~III of the A=1 Discrete
+       Causal Lattice series; takes up follow-on item~\#9
+       (\emph{Tidal Ionization Mass}) of Paper~I's
+       \texttt{notes/follow\_on\_implications.md} catalogue.
+       Builds on \emph{Geometry First}
+       (Paper~I,
+       \href{https://doi.org/10.5281/zenodo.20078529}{DOI:
+       10.5281/zenodo.20078529}) and is orthogonal to Paper~II
+       (\emph{Geometry Forces Physics},
+       \href{https://doi.org/10.5281/zenodo.20240736}{DOI:
+       10.5281/zenodo.20240736}).
+       Pre-release draft; DOI for this paper to be assigned at
+       v1.0 deposit.}}
+\author{Jack Menendez\\
+        \small Eugene, OR\\
+        \small ORCID: \href{https://orcid.org/0009-0003-1166-307X}{0009-0003-1166-307X}\\
+        \small \href{mailto:jackdmenendez@gmail.com}{jackdmenendez@gmail.com}}
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
+\begin{abstract}
+    \input{sections/abstract}
+\end{abstract}
+
 %% ---------------------------------------------------------------
-%% FRONT-MATTER NOTICES
+%% FRONT-MATTER NOTICES (after abstract per author preference)
 %% ---------------------------------------------------------------
+
+\medskip
+\noindent\textbf{Keywords.}  A=1 Discrete Causal Lattice; quantum
+Roche limit; tidal ionization; gradient ionization; Arnold tongue;
+clock density; atomic ISCO; 21\,cm HI; compact-object atmospheres.
+
+\medskip
 \noindent\textbf{License.}  Paper text and figures: Creative Commons
 Attribution 4.0 (CC BY 4.0).  Source code in the companion
 repository: MIT License.
 
 \medskip
 \noindent\textbf{Data availability.}  Numerical experiments, data
-files, and the LaTeX source for this paper are publicly available at
-\href{https://github.com/USER/REPO}%
-     {\nolinkurl{github.com/USER/REPO}}.
-%% At release time, point to the tag and the Zenodo DOI:
-%% The exact commit corresponding to this release is the vX.Y tag,
-%% archived at
-%% \href{https://doi.org/10.5281/zenodo.XXXXXXXX}%
-%%      {\nolinkurl{doi:10.5281/zenodo.XXXXXXXX}}.
-
-\medskip
-\noindent\textbf{Keywords.}  keyword one; keyword two; keyword three.
-
-\newpage
-
-\begin{abstract}
-    \input{sections/abstract}
-\end{abstract}
+files, and the \LaTeX{} source for this paper are publicly available
+at \nolinkurl{github.com/JackDMenendez/dcl-paper-03-tidal-ionization}.
+The load-bearing numerical experiment
+\nolinkurl{exp_18_tidal_ionization.py} was introduced in Paper~I
+(\texttt{src/experiments/} of the upstream dcl
+repo)~\cite{menendez2026geometry} and is reproduced here verbatim
+with a Provenance block; Paper~III's contribution is the
+analytical $M_\text{min}(d)$ quantum Roche limit derivation, the
+$d^3$ scaling identification, the numerical confirmation produced by
+running the inherited experiment, and the observational predictions
+for 21\,cm HI inner-edge morphology near compact objects.
 
 %% ---------------------------------------------------------------
 %% RELEASE NOTES (only at release time)
@@ -73,7 +81,6 @@ files, and the LaTeX source for this paper are publicly available at
 %% \noindent\textbf{Release notes for vX.Y (since vX.Y-1).}
 %% \begin{itemize}
 %% \item Item 1.
-%% \item Item 2.
 %% \end{itemize}
 
 %% \emph{Status legend used throughout.}  \texttt{PASS} / \texttt{PART}
@@ -84,17 +91,17 @@ files, and the LaTeX source for this paper are publicly available at
 \newpage
 
 %% ============================================================
-%% PART I: <name>
+%% MAIN
 %% ============================================================
 \section{Introduction}
 \input{sections/introduction}
 
-\section{A Section Showing the Patterns}
-\input{sections/section_template}
-
-%% Add more \section{...} \input{sections/...} blocks as needed.
-%% Group with comment dividers (e.g., "PART II: DYNAMICS") to keep
-%% main.tex skimmable as the paper grows.
+%% Planned sections for v1.0 (Phase 2 content, drafted as we go):
+%%   \section{The Arnold-tongue lock-in mechanism}
+%%   \section{Gradient detuning and the critical condition}
+%%   \section{The quantum Roche limit and its $d^3$ scaling}
+%%   \section{Numerical confirmation (exp\_18)}
+%%   \section{Observational predictions}
 
 \section{Conclusion}
 \input{sections/conclusion}

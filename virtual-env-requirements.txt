@@ -1,8 +1,21 @@
 numpy
 matplotlib
 pytest
+scipy
+
+# The A=1 framework engine is provided by dcl_core's `core` submodule
+# (Paper~I's continuous-amplitude engine, ported verbatim into
+# dcl_core).  Pinned to `@main` during dcl_core's pre-v0.1.0 phase;
+# update to a `@vX.Y.Z` tag once dcl_core ships its first release,
+# so this paper's Zenodo deposit pins to an immutable version.
+dcl_core @ git+https://github.com/JackDMenendez/dcl-core@main
+
+# scipy is used by the experimental analysis in
+# src/experiments/exp_18_tidal_ionization.py (curve fitting of the
+# M_min(d) ionization threshold against the predicted Roche-like
+# d^3 scaling).
 
 # Pin specific versions in a separate file (e.g. requirements.lock.txt)
 # once the environment is stable.  Add other dependencies as the project
-# develops -- e.g. scipy, sympy, networkx, pandas, seaborn -- but keep
+# develops -- e.g. sympy, networkx, pandas, seaborn -- but keep
 # this file minimal so a fresh clone can install quickly.

@@ -1,14 +1,31 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "Your Paper Title"
+title: "Tidal Ionization of Atomic Hydrogen and the Quantum Roche Limit"
 authors:
-  - family-names: Lastname
-    given-names: Firstname
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-    affiliation: "Affiliation"
+  - family-names: Menendez
+    given-names: Jack
+    orcid: "https://orcid.org/0009-0003-1166-307X"
+    affiliation: "Independent Scholar (Eugene, OR)"
 version: v0.1-DRAFT
-date-released: YYYY-MM-DD
+date-released: 2026-05-16
 # At release time, fill in the Zenodo DOI assigned for this version:
 # doi: 10.5281/zenodo.XXXXXXXX
-repository-code: "https://github.com/USER/REPO"
+repository-code: "https://github.com/JackDMenendez/dcl-paper-03-tidal-ionization"
 license: MIT
+references:
+  - type: article
+    title: "Geometry First: Quantum Mechanics, Gravity, and the Origin of the Standard Model from a Single Conservation Law"
+    authors:
+      - family-names: Menendez
+        given-names: Jack
+    doi: 10.5281/zenodo.20078529
+    year: 2026
+    notes: "Paper I of the A=1 Discrete Causal Lattice series.  Establishes the bipartite octahedral lattice, the A=1 conservation axiom, the clock-density gravity mechanism, and the exp_12 two-body hydrogen Arnold-tongue lock-in result that this paper's quantum Roche limit calculation extends."
+  - type: article
+    title: "Geometry Forces Physics: A Lie-Algebra Derivation of the Standard Model Gauge Group from a Single Conservation Law"
+    authors:
+      - family-names: Menendez
+        given-names: Jack
+    doi: 10.5281/zenodo.20240736
+    year: 2026
+    notes: "Paper II of the series.  Companion gauge-derivation paper; this paper (Paper III) takes up follow-on item #9 from Paper I's notes/follow_on_implications.md catalogue."

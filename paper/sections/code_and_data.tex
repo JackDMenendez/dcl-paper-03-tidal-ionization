@@ -1,7 +1,53 @@
 % code_and_data.tex
 \label{sec:code_and_data}
 
-\placeholder{Describe what is in the companion repository: directory
-layout, how to inspect the data files, where the figure-generating
-scripts live. The aim is that a reader can reproduce or audit any claim
-in the paper from this appendix plus the linked DOI.}
+\subsection{Repository layout}
+
+\begin{itemize}
+\item \texttt{src/experiments/exp\_18\_tidal\_ionization.py}
+  -- the load-bearing g-scan experiment.  Reproduced verbatim from
+  Paper~I's
+  \texttt{src/experiments/exp\_18\_tidal\_ionization.py}~\cite{menendez2026geometry};
+  see the Provenance block in the script's docstring.  Sweeps
+  gradient $g$ from $0$ (control) through $\sim\!5\times
+  g_\text{crit}$, measures $T_\text{escape}(g)$ via the windowed
+  $r_\text{pdf}$ diagnostic, and records the tidal-displacement
+  signature ($x_e, x_p$ projections relative to system CoM).
+\item \texttt{src/experiments/exp\_18\_tidal\_ionization.md} --
+  Paper~III's expansion of Paper~I's stub: parameter table, expected
+  runtime, PASS/PART/FAIL criteria for each audit-table row this
+  experiment evidences.
+\item \texttt{notes/plasma\_as\_gravitational\_ionization.md} --
+  inherited from Paper~I with a Provenance prefix.  The
+  Arnold-tongue / clock-density-gradient theoretical apparatus this
+  paper builds on.
+\item \texttt{notes/quantum\_roche\_limit.md} -- new in this paper.
+  Synthesises Paper~I's gradient-ionization argument with the $M/d^3$
+  Roche-scaling observation from Paper~I's follow-on catalogue
+  entry~\#9, and outlines the $M_\text{min}(d)$ derivation that lands
+  in the paper's main body.
+\item \texttt{data/exp\_18\_tidal\_ionization.npy} -- g-scan output:
+  rows of $(g, \text{escaped}, T_\text{escape}, x_e\_proj,
+  x_p\_proj, r_\text{pdf,first\_window})$.  Written by the
+  experiment script; tracked in git once the run produces it.
+\item \texttt{data/exp\_18\_rpdf\_trajectories.npy} -- full
+  $r_\text{pdf}(t)$ trajectories per $g$ value, for the trajectory
+  figures.
+\end{itemize}
+
+\subsection{Engine}
+
+The experiment script imports framework primitives
+(\texttt{OctahedralLattice}, \texttt{CausalSession},
+\texttt{enforce\_unity\_spinor}) from \texttt{dcl\_core.core} --
+the continuous-amplitude submodule of the shared \texttt{dcl\_core}
+package
+(\href{https://github.com/JackDMenendez/dcl-core}{\nolinkurl{github.com/JackDMenendez/dcl-core}}),
+which contains a verbatim port of Paper~I's
+original \texttt{src/core/}.  The dependency is declared in
+\texttt{virtual-env-requirements.txt} and installed automatically
+by \texttt{setup.cmd} / \texttt{setup.sh}; no separate engine
+provisioning is required.  At Paper~III's v1.0 release, the
+\texttt{dcl\_core} dependency will be pinned to a specific
+\texttt{@vX.Y.Z} tag (and that tag's Zenodo deposit DOI) so that
+the released paper binds to an immutable engine version.

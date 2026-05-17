@@ -1,22 +1,20 @@
 % ============================================================
-% audit_table.tex
+% audit_table.tex -- Paper III: Tidal Ionization / Quantum Roche Limit
 %
 % A "system audit" table mapping the paper's claims to the evidence
 % backing each one.  This is *the* canonical source of truth for which
 % claims are PASS / PART / STUB / FAIL --- prose elsewhere in the paper
 % should not contradict it.
 %
-% Status semantics (paste into the abstract or front-matter as well):
+% Status semantics:
 %   PASS  -- derivation complete or experiment confirms the claim to
 %            stated precision.
 %   PART  -- mechanism demonstrated, full quantitative match pending;
 %            specific gaps documented in the evidence column.
 %   STUB  -- analytical result with no numerical confirmation yet,
-%            or planned experiment not yet run.
+%            or planned experiment / paper-text derivation not yet
+%            written.
 %   FAIL  -- tested and disconfirmed.
-%
-% Use \texttt{} for code/experiment names and file paths inside cells.
-% Long cells are fine -- the column widths are tuned for prose.
 % ============================================================
 
 \label{tab:audit}
@@ -24,10 +22,15 @@
 {\scriptsize
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{0.95}
-\begin{longtable}{@{}p{2.6cm}p{3.8cm}p{3.2cm}p{4.4cm}p{1.0cm}@{}}
-\caption{\small System audit: paper claims mapped to supporting
-derivations and experiments.  Status semantics in the front-matter
-(\texttt{PASS} / \texttt{PART} / \texttt{STUB} / \texttt{FAIL}).}
+\begin{longtable}{@{}p{2.8cm}p{3.6cm}p{3.6cm}p{4.0cm}p{1.0cm}@{}}
+\caption{\small Audit for Paper~III.  Inherited rows are evidenced by
+Paper~I material (analytical derivations in
+\texttt{notes/plasma\_as\_gravitational\_ionization.md}; numerical
+machinery in \texttt{exp\_18\_tidal\_ionization.py}, reproduced
+verbatim in this repo).  Paper~III-specific rows -- the explicit
+$M_\text{min}(d)$ derivation, the $d^3$ scaling identification, the
+g-scan run results, and the observational predictions -- start
+\texttt{STUB}/\texttt{PART} in v0.1 and flip as Phase~2 lands.}
 \label{tab:audit_caption} \\
 \hline
 \textbf{Claim} & \textbf{Mechanism} & \textbf{Continuum / formal limit} & \textbf{Evidence} & \textbf{Status} \\
@@ -47,20 +50,120 @@ derivations and experiments.  Status semantics in the front-matter
 \hline
 \endlastfoot
 
-% ── Example row 1 (replace with a real claim) ───────────────────────
-Example claim, fully derived
-    & One-line summary of the mechanism
-    & The standard / continuum statement it reduces to
-    & Derived analytically (\S\ref{subsec:cross_ref_example}, Eq.~\ref{eq:example_identity})
+% ── Inherited from Paper I ──────────────────────────────────────────
+\multicolumn{5}{l}{\textit{Inherited from Paper~I~\cite{menendez2026geometry}.}} \\
+\hline
+
+Hydrogen as joint two-session Arnold-tongue lock-in
+    & Bipartite tick rule + clock-density mass; lock-in at
+      $\omega \cdot R_1 = \pi/3$
+    & Standard hydrogen spectrum in the continuum limit
+    & \texttt{exp\_12} (Paper~I), $k_\text{min} = 0.0970$ vs
+      $k_\text{Bohr} = 0.0971$ to 4 sig figs
     & \texttt{PASS} \\
 
-% ── Example row 2 (replace with a real claim) ───────────────────────
-Example claim, partial evidence
-    & One-line summary
-    & The target statement
-    & \texttt{exp\_XX}: describe the gap concretely (e.g.\ ``mechanism
-      reproduced; quantitative match pending higher-resolution run'')
+Gradient detuning breaks the joint resonance
+    & $\omega_\text{eff}(x) = \omega \cdot \bar{\rho} /
+      \rho_\text{clock}(x)$; differential detuning across $R_1$
+      exceeds $\Delta\omega_\text{tongue}$
+    & Three ionization channels (thermal Saha + pressure-degenerate
+      + gradient detuning); the third is new in this framework
+    & \texttt{notes/plasma\_as\_gravitational\_ionization.md}
+      (analytical)
+    & \texttt{PASS} \\
+
+% ── Paper III-specific ──────────────────────────────────────────────
+\hline
+\multicolumn{5}{l}{\textit{Paper~III-specific claims (this paper).}} \\
+\hline
+
+Quantum Roche limit $M_\text{min}(d) \cdot R_1 / d^3 =
+\Delta\omega_\text{tongue}$
+    & Substitute $g = M / d^2$ into the gradient-detuning condition;
+      solve for $M$ at threshold
+    & $M_\text{min}(d) = \Delta\omega_\text{tongue} \cdot d^3 / R_1$;
+      same $d^3$ scaling as classical Roche limit~\cite{roche1849}
+      with $\Delta\omega_\text{tongue}$ replacing body density
+    & Paper-text derivation pending (\S\,planned)
+    & \texttt{STUB} \\
+
+$d^3$ scaling is the quantum-mechanical analogue of the classical
+Roche limit
+    & Both derive from $|\nabla F| \cdot \ell / F = $ const at
+      threshold, where $\ell$ is the bound-state size and $F$ is
+      the strength of the binding force; the framework derives the
+      quantum case from the Arnold-tongue width
+    & The two limits are the same identity seen from two levels of
+      description; in the lattice they are the same thing
+    & Paper-text observation pending (\S\,planned)
+    & \texttt{STUB} \\
+
+Three ionization channels (thermal, pressure, gradient)
+    & Saha (kinetic) + Pauli (degenerate) + Arnold-tongue
+      detuning (gradient); the third is new in the framework
+    & Standard astrophysics recognises the first two; the third
+      becomes dominant near compact objects
+    & \texttt{notes/plasma\_as\_gravitational\_ionization.md};
+      paper-text consolidation pending
     & \texttt{PART} \\
+
+Numerical confirmation:
+$T_\text{escape}(g)$ decreases monotonically with $g$, sharp drop
+near $g_\text{crit}$
+    & g-scan in \texttt{exp\_18}: apply linear gradient
+      $V_\text{tidal} = g \cdot (x - x_\text{centre})$ from
+      $t = 0$; measure tick at which $r_\text{pdf} > 2 R_1$ for
+      $N$ consecutive windows
+    & $g_\text{crit} \approx \Delta\omega_\text{tongue} / R_1$;
+      Paper~I's free-particle tongue width gives
+      $g_\text{crit} \approx 0.016$ per node
+    & \texttt{exp\_18\_tidal\_ionization.py}: script in place
+      (Paper~I copy, reproduced here); runtime evidence pending
+      first run from this repo
+    & \texttt{STUB} \\
+
+Tidal displacement diagnostic:
+electron and proton move in opposite directions under gradient
+(not isotropically as for thermal disruption)
+    & x-projection of CoM relative to system CoM should show
+      $x_e \cdot x_p < 0$ for gradient ionization, isotropic
+      scatter for energy-injection disruption
+    & Distinguishes gradient ionization from
+      kinetic-energy-injection mechanisms
+    & \texttt{exp\_18} diagnostic columns
+      (\texttt{x\_e\_proj}, \texttt{x\_p\_proj}); runtime evidence
+      pending
+    & \texttt{STUB} \\
+
+Atomic ISCO: innermost stable atomic orbit
+$r_\text{atomic\_ISCO}(M)$
+    & Largest $d$ at which gradient ionization always succeeds
+      for the $n=1$ ground state, independent of temperature;
+      analogue of geodesic ISCO at $r = 6 GM / c^2$
+    & Innermost neutral-hydrogen radius around compact objects;
+      structural prediction independent of thermal modelling
+    & Paper-text derivation pending (\S\,planned)
+    & \texttt{STUB} \\
+
+Observational signature:
+21\,cm HI inner-edge morphology near compact objects
+    & Threshold $M_\text{min}(d)$ gives a temperature-independent
+      inner boundary for neutral hydrogen
+    & 21\,cm HI absorption / emission inner edge near neutron stars
+      and active galactic nuclei
+    & Paper-text comparison to existing 21\,cm HI surveys pending
+      (\S\,planned)
+    & \texttt{STUB} \\
+
+Observational signature:
+Fe K$\alpha$ line-profile inner edge in accretion disks
+    & Atomic ISCO gives an inner edge for Fe atoms supporting
+      K$\alpha$ emission; below the atomic ISCO, Fe is fully
+      ionized regardless of temperature
+    & Inner edge of Fe K$\alpha$ emission near accretion disks
+      (XMM-Newton / NICER profiles)
+    & Paper-text comparison pending (\S\,planned)
+    & \texttt{STUB} \\
 
 \hline
 \end{longtable}
