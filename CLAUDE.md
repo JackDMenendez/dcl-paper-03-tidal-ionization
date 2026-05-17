@@ -191,6 +191,21 @@ v1.0 release, update the pin to a `@vX.Y.Z` tag so the Zenodo
 deposit is bound to an immutable engine version (and that engine
 version itself is Zenodo-deposited for archival reproducibility).
 
+**Pre-release rule (READ THIS BEFORE EVERY PAPER III RELEASE).**
+
+Before depositing Paper~III on Zenodo, the `dcl_core` pin in
+`virtual-env-requirements.txt` MUST point at a `@vX.Y.Z` tag, not
+`@main`.  A paper that ships pinned to `@main` is non-reproducible:
+a reviewer cloning the tag in two years' time would get whatever
+`dcl_core`'s `main` is at that point, not the engine version this
+paper was actually run against.
+
+The pre-release pin-bump workflow lives in `release_notes/README.md`
+(*Pre-release: bump pinned dcl_core to a tagged release* section).
+The co-released order is fixed: deposit `dcl-core` first to get
+its Zenodo DOI, then bump Paper~III's pin and `CITATION.cff`
+reference, then deposit Paper~III.  Do not reverse the order.
+
 No manual engine setup is required: `setup.cmd` / `setup.sh`
 installs `dcl_core` into `.venv` automatically.  This Paper~III
 repo's own `src/core/` is empty (template default) and is
