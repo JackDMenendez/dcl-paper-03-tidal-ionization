@@ -5,10 +5,12 @@ scipy
 
 # The A=1 framework engine is provided by dcl_core's `core` submodule
 # (Paper~I's continuous-amplitude engine, ported verbatim into
-# dcl_core).  Pinned to `@main` during dcl_core's pre-v0.1.0 phase;
-# update to a `@vX.Y.Z` tag once dcl_core ships its first release,
-# so this paper's Zenodo deposit pins to an immutable version.
-dcl_core @ git+https://github.com/JackDMenendez/dcl-core@main
+# dcl_core).  Pinned to dcl_core v0.1.0
+# (Zenodo: 10.5281/zenodo.20350952) so this paper's Zenodo deposit
+# anchors to an immutable engine version.  Bump the @vX.Y.Z tag here
+# whenever dcl_core ships a new release that this paper should
+# rebuild against.
+dcl_core @ git+https://github.com/JackDMenendez/dcl-core@v0.1.0
 
 # scipy is used by the experimental analysis in
 # src/experiments/exp_18_tidal_ionization.py (curve fitting of the

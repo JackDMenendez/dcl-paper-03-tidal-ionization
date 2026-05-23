@@ -26,6 +26,15 @@ references:
     authors:
       - family-names: Menendez
         given-names: Jack
-    doi: 10.5281/zenodo.20240736
+    doi: 10.5281/zenodo.20292158
     year: 2026
-    notes: "Paper II of the series.  Companion gauge-derivation paper; this paper (Paper III) takes up follow-on item #9 from Paper I's notes/follow_on_implications.md catalogue."
+    notes: "Paper II of the series (v1.01; supersedes v1.0 at 10.5281/zenodo.20240736).  Companion gauge-derivation paper; this paper (Paper III) takes up follow-on item #9 from Paper I's notes/follow_on_implications.md catalogue."
+  - type: software
+    title: "dcl_core: Core library for the A=1 Discrete Causal Lattice framework"
+    authors:
+      - family-names: Menendez
+        given-names: Jack
+    doi: 10.5281/zenodo.20350952
+    year: 2026
+    version: v0.1.0
+    notes: "The simulation engine this paper's experiments import.  Paper III pins dcl_core==0.1.0 in virtual-env-requirements.txt so its reproducibility is anchored to an immutable engine version; src/experiments/exp_18_tidal_ionization.py uses dcl_core.core (Paper I's continuous-amplitude formulation, ported verbatim)."
