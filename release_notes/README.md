@@ -1,15 +1,23 @@
 # release_notes/
 
-One file per released version. Two files per release:
+One folder per released version of Paper~III, with these artefacts
+per release:
 
-- `vX.Y.md` -- the **change log** for this release. Long-form,
-  internal: what changed, why, what's deferred, bibliography
-  additions, reproducibility instructions. This is the file the paper
-  references from `release_notes/vX.Y.md`.
-- `vX.Y-release-message.md` -- the **GitHub Release body**. The
-  outward-facing version: headline change, audit-status delta, what's
-  out of scope. Posted as the body of the GitHub Release alongside
-  the tag.
+- `vX.Y.md` -- **change log** for the release.  Long-form, internal:
+  what changed, why, what's deferred, bibliography additions,
+  reproducibility instructions.
+- `vX.Y-release-message.md` -- **GitHub Release body**.  Outward-
+  facing headline + audit-status delta; posted alongside the tag.
+- `vX.Y-zenodo-description.txt` -- text pasted into Zenodo's
+  **Description** field at deposit time.  Plain text; format
+  modelled on
+  `C:\dev\dcl-sm-derivation\release_notes\zenodo_description.txt`.
+- `zenodo_references.txt` -- text pasted into Zenodo's
+  **References** field (bibliographic citations, one per line).
+  Durable: reuse and edit each release.
+- `zenodo_related_works.txt` -- entries for Zenodo's
+  **Related / alternate identifiers** section.  Durable: reuse
+  and edit each release.
 
 Templates:
 
@@ -49,20 +57,23 @@ Workflow:
        authors:
          - family-names: Menendez
            given-names: Jack
-       version: v0.1.0
+       version: vX.Y.Z
        doi: 10.5281/zenodo.XXXXXXXX
        year: 2026
        notes: "Engine release Paper III's exp_18 ran against; pinned in virtual-env-requirements.txt to this exact tag."
    ```
 
-4. **Reinstall the venv** to pick up the pinned version:
+4. **Reinstall the venv** to pick up the pinned version.  Use the
+   project's `refresh-deps.{sh,cmd}` helper if present (which
+   handles PEP 668 on MSYS2 and surgically force-reinstalls only
+   `dcl_core`); otherwise:
 
    ```text
    pip install -r virtual-env-requirements.txt --force-reinstall --no-deps dcl_core
    ```
 
-5. **Re-run `exp_18` end-to-end** as a cheap sanity check that
-   nothing broke under the pin change.
+5. **Re-run `exp_18` end-to-end** as a quick check that nothing
+   broke under the pin change.
 
 6. **Commit "Pre-release: pin dcl_core to vX.Y.Z"** as the paper's
    pre-release checkpoint before continuing.
@@ -71,93 +82,75 @@ Do this even if you believe the engine has not changed; the
 discipline of pin-then-rerun is what guarantees the deposit's
 reproducibility.
 
-## Release flow
+## Release flow (v2 -- 2026-05-26)
 
-Pre-conditions: pre-release pin-bump done (above); final commits
-landed on `main`; CI green.
+This protocol applies uniformly to every subproject in the
+A=1 Discrete Causal Lattice series (dcl-core, dcl-delta-p-min,
+dcl-paper-03, future ones).  Each step is owned by either
+**Claude** (the agent running inside this repo) or **User**;
+do not skip an owner-marked step.  Steps marked **conditional**
+apply only if the named artefact exists in this repo.  For
+Paper~III, both step 8 and step 14 apply (`paper/main.tex`
+exists).
 
-1. **Final build + audit.**  `build.cmd paper` (POSIX:
-   `./build.sh paper`) produces a candidate `build/main.pdf`.
-   Run `python audit_universe.py` to confirm no rows have
-   regressed.  Open the PDF and visually check the title page,
-   audit table, and any newly-added sections.  This is the last
-   chance to catch issues before the DOI gets locked to a
-   snapshot.
+| # | Step | Owner |
+|---|---|---|
+| 1 | CI green on `main`. | Claude |
+| 2 | Bump `CITATION.cff` (`version`, `date-released`).  (Paper~III ships no Python package; no `_version.py` to bump.) | Claude |
+| 3 | Draft `release_notes/vX.Y.md` and `release_notes/vX.Y-release-message.md`. | Claude |
+| 4 | Draft `release_notes/vX.Y-zenodo-description.txt` (model: `dcl-sm-derivation/release_notes/zenodo_description.txt`). | Claude |
+| 5 | Draft or update `release_notes/zenodo_references.txt`. | Claude |
+| 6 | Draft or update `release_notes/zenodo_related_works.txt`. | Claude |
+| 7 | Run unit tests if any exist; `python audit_universe.py` must show no PASS rows regressed. | Claude |
+| 8 | **`paper/main.tex` exists:** | |
+| 8a |   Add version to title in `main.tex`. | Claude |
+| 8b |   Review abstract, introduction, conclusion, `References.bib`; make necessary changes. | Claude |
+| 8c |   Build `main.tex` to `build/` (`./build.sh paper` or `build.cmd paper`). | Claude |
+| 8d |   Review PDF in `build/`. | User |
+| 9 | Run `export-vscode-extensions.{cmd,sh}` -> tracked `extensions.txt` at repo root. | Claude |
+| 10 | Run `generate-dockerfile.{cmd,sh}` -> tracked `Dockerfile`. | Claude |
+| 11 | Reserve a Zenodo DOI (Zenodo "New upload" -> *Reserve DOI*) and supply the DOI string to Claude. | User |
+| 12 | DOI lands in `release_notes/vX.Y.md`. | Claude |
+| 13 | DOI lands in `CITATION.cff` (`doi:` field). | Claude |
+| 14 | **`paper/main.tex` exists:** | |
+| 14a |   DOI lands in `main.tex` (`\thanks{}` block, replacing the placeholder URL with `https://doi.org/10.5281/zenodo.NNNNNNNN`). | Claude |
+| 14b |   Rebuild PDF. | Claude |
+| 14c |   Final document check (title page, audit table, newly-added sections). | User |
+| 14d |   Rename PDF to `stage/dcl-paper-03-tidal-ionization-vX.Y.pdf` (durable per-version snapshot). | User |
+| 14e |   Upload the snapshotted PDF to Zenodo; confirm the deposit was added to the `a1-discrete-causal-lattice` Zenodo community. | User |
+| 15 | Upload software files (data products, source archive, etc.) to Zenodo. | User |
+| 16 | Commit generated files + version bump (DOI included). | Claude |
+| 17 | Tag `vX.Y` and push the tag.  (Tags are immutable once pushed; Claude must surface what it is about to do before running this.) | Claude |
+| 18 | Create the GitHub Release draft using the `vX.Y-release-message.md` body. | User |
+| 19 | (Optional) Publish to PyPI -- **N/A for Paper~III** (no Python package). | -- |
+| 20 | Publish the GitHub Release (click *Publish* in the GitHub UI). | User |
+| 21 | Supply Claude with the project-plan delta needed for the release. | User |
+| 22 | Update project plan with release info. | Claude |
+| 23 | Update GitHub project board. | User |
 
-2. **[User] Reserve a Zenodo DOI.**  In the Zenodo "New upload"
-   form, click *Reserve DOI* to mint a DOI without publishing the
-   deposit.  Copy the DOI string (form `10.5281/zenodo.NNNNNNNN`).
-   The deposit stays in *Draft* status until step 6.
+## Helper scripts required by steps 9 and 10
 
-3. **Insert the DOI and rebuild the PDF.**  Add the DOI to:
+The two helper scripts referenced by steps 9 and 10 **do not yet
+exist** in this repo (or in any other DCL subproject as of
+2026-05-26).  Any release that runs this protocol is blocked at
+those steps until the scripts are created.
 
-   - `CITATION.cff`'s `doi:` field;
-   - `paper/main.tex` `\thanks{}` block (replace the placeholder
-     URL with `https://doi.org/10.5281/zenodo.NNNNNNNN`);
-   - `release_notes/vX.Y.md` and
-     `release_notes/vX.Y-release-message.md` header blocks.
+- `export-vscode-extensions.cmd` / `.sh` should produce
+  `extensions.txt` at the repo root, containing one VS Code
+  extension ID per line (the output of `code --list-extensions`).
+- `generate-dockerfile.cmd` / `.sh` should produce a tracked
+  `Dockerfile` that reproduces the development environment
+  sufficiently to run this repo's experiments / tests.
 
-   Update `CITATION.cff`'s `version:` and `date-released:` fields
-   in the same pass.  Then rebuild:
+When the canonical implementations of these scripts land -- likely
+in the user's `wcde` repo (`C:\dev\wcde`) or in
+`dcl-sm-derivation`'s `release_notes/` -- copy them into each
+subproject.  Until then, Claude must stop at steps 9-10 and ask
+the User how to proceed.
 
-   ```text
-   build.cmd paper
-   ```
+## Immutability
 
-   The fresh `build/main.pdf` now carries the real DOI on the
-   title page -- this is the file that will be deposited.
-
-4. **Snapshot the PDF to `.stage/`.**
-
-   ```text
-   mkdir .stage 2>NUL
-   copy build\main.pdf .stage\dcl-paper-03-tidal-ionization_vX.Y.pdf
-   ```
-
-   `.stage/` is gitignored; it is the durable per-version archive
-   that survives `make clean`, distinct from `build/` (disposable
-   working area).
-
-5. **Commit the version bump + DOI fill-in.**  Suggested message:
-
-   ```text
-   vX.Y release: fill DOI placeholders, snapshot PDF
-
-   - DOI 10.5281/zenodo.NNNNNNNN added to CITATION.cff,
-     paper/main.tex \thanks{}, release_notes/vX.Y*.md
-   - Rebuilt PDF with the DOI in place
-   - Snapshotted build/main.pdf -> .stage/dcl-paper-03-tidal-ionization_vX.Y.pdf
-   ```
-
-6. **[User] Upload the snapshotted PDF to Zenodo and publish.**
-   Drag `.stage/dcl-paper-03-tidal-ionization_vX.Y.pdf` into the
-   reserved-DOI draft deposit; fill in the metadata (title,
-   authors, abstract, keywords, related identifiers pointing at
-   Paper~I, Paper~II, and the pinned `dcl_core` Zenodo DOI);
-   click *Publish*.  This locks in the DOI and the deposit
-   becomes immutable.  Confirm the deposit was added to the
-   `a1-discrete-causal-lattice` Zenodo community.
-
-7. **Tag and push.**
-
-   ```text
-   git tag vX.Y
-   git push origin vX.Y
-   ```
-
-   Tags are immutable once pushed.  Confirm with yourself before
-   pushing.
-
-8. **Create the GitHub Release.**
-
-   ```text
-   gh release create vX.Y \
-       --title "vX.Y -- <one-line headline>" \
-       --notes-file release_notes/vX.Y-release-message.md
-   ```
-
-   Confirm via `gh release view vX.Y` that the body rendered
-   correctly.
-
-For the *prior* release flow record on the parent project, see the
-git history of the source repository this template was derived from.
+Once a tag is pushed and the GitHub Release is published, **the
+released version is immutable**.  Do not amend the tagged commit.
+Do not re-deposit on Zenodo.  A typo in the release notes gets a
+follow-up PATCH release; do not rewrite history.
