@@ -173,8 +173,11 @@ elsewhere on a contributor's machine, substitute the actual path.
   `--build-arg PYTHON_VERSION=3.14` when building the image, or
   edit the `ARG PYTHON_VERSION` line in the generated Dockerfile
   before committing.
-- `.vscode/` is in many default `.gitignore` templates; add an
-  `!extensions.txt` exception so the snapshot is tracked.
+- `.vscode/` is otherwise blanket-ignored in this repo; the
+  `.vscode/*` + `!.vscode/extensions.txt` pattern in `.gitignore`
+  keeps the snapshot tracked so PR contributors can rebuild the
+  same VS Code workspace.  Do not collapse the `.vscode/*` rule
+  back to `.vscode/`.
 - `.dev-shell/` is wcde-specific; confirm it is tracked before
   committing in step 16.
 
