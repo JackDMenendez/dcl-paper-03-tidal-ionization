@@ -253,6 +253,12 @@ Paper~III verbatim, vendor-style) see `dcl_core`'s own `CLAUDE.md`
 - **LaTeX layout idioms.** `\nolinkurl{}` for paths, `\url{}` for
   URLs inside `\href{}`.  `longtable` for tables that may span
   pages.
+- **Handoffs (cross-session).** At the end of a unit of work another
+  session needs to pick up (the PM, or another repo's Claude), file a
+  handoff via the **`/handoff`** skill -- a committed record under
+  `dcl-project/handoffs/` with required frontmatter and an explicit
+  *Consumer actions* list. Don't use chat-paste status as the system of
+  record (lossy; buried risk-flags get dropped).
 
 ## Documentation convention for code
 
